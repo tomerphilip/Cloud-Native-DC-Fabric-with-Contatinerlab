@@ -1,0 +1,22 @@
+# --- Containerlab Runtime Artifacts (IGNORE THESE) ---
+# התעלמות מהתיקייה הספציפית שנוצרת בריצה
+clab-topology/clab-*/
+**/clab-evpn01/
+
+# התעלמות כללית מתוצרי לוואי של Containerlab
+.clab/
+*.log
+*.pcap
+*.pcapng
+
+# התעלמות ממפתחות אבטחה (שאסור שיעלו לגיט בטעות)
+*.pem
+*.key
+*.csr
+*.crt
+authorized_keys
+
+# התעלמות מקבצים זמניים של מערכת ההפעלה
+.DS_Store
+Thumbs.db
+*.swp

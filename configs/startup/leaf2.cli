@@ -1,0 +1,66 @@
+enter candidate
+# Interfaces
+set / interface system0 subinterface 0 ipv4 admin-state enable address 2.2.2.2/32
+set / interface ethernet-1/2 subinterface 0 ipv4 admin-state enable address 10.1.2.2/30
+set / interface ethernet-1/3 subinterface 0 ipv4 admin-state enable address 10.1.2.6/30
+# Network Instance
+set / network-instance default interface system0.0
+set / network-instance default interface ethernet-1/2.0
+set / network-instance default interface ethernet-1/3.0
+# Underlay
+set / network-instance default protocols isis instance 1 admin-state enable level-capability L2 net [ 49.0001.0000.0000.0002.00 ]
+set / network-instance default protocols isis instance 1 interface ethernet-1/2.0 circuit-type point-to-point
+set / network-instance default protocols isis instance 1 interface ethernet-1/3.0 circuit-type point-to-point
+set / network-instance default protocols isis instance 1 interface system0.0 passive true
+# Overlay BGP
+set / network-instance default protocols bgp autonomous-system 65000 router-id 2.2.2.2
+set / network-instance default protocols bgp afi-safi evpn admin-state enable
+set / network-instance default protocols bgp afi-safi ipv4-unicast admin-state enable
+set / network-instance default protocols bgp group overlay peer-as 65000 transport local-address 2.2.2.2
+set / network-instance default protocols bgp group overlay afi-safi evpn admin-state enable
+set / network-instance default protocols bgp neighbor 3.3.3.3 peer-group overlay
+set / network-instance default protocols bgp neighbor 4.4.4.4 peer-group overlay
+set / network-instance default protocols bgp admin-state enable
+
+# --- SERVICES ---
+# Tunnel
+set / tunnel-interface vxlan0 vxlan-interface 1 type bridged
+set / tunnel-interface vxlan0 vxlan-interface 1 ingress vni 10
+set / tunnel-interface vxlan0 vxlan-interface 2 type routed
+set / tunnel-interface vxlan0 vxlan-interface 2 ingress vni 20
+
+# Access (CRITICAL FIX: UNTAGGED)
+set / interface ethernet-1/1 vlan-tagging true
+set / interface ethernet-1/1 subinterface 10 type bridged
+set / interface ethernet-1/1 subinterface 10 vlan encap untagged
+
+# MAC-VRF (L2)
+set / network-instance tenant-1 type mac-vrf
+set / network-instance tenant-1 interface ethernet-1/1.10
+set / network-instance tenant-1 vxlan-interface vxlan0.1
+# EVPN L2
+set / network-instance tenant-1 protocols bgp-evpn bgp-instance 1 admin-state enable
+set / network-instance tenant-1 protocols bgp-evpn bgp-instance 1 vxlan-interface vxlan0.1
+set / network-instance tenant-1 protocols bgp-evpn bgp-instance 1 evi 10
+set / network-instance tenant-1 protocols bgp-evpn bgp-instance 1 ecmp 2
+set / network-instance tenant-1 protocols bgp-vpn bgp-instance 1 route-target export-rt target:65000:10
+set / network-instance tenant-1 protocols bgp-vpn bgp-instance 1 route-target import-rt target:65000:10
+
+# Anycast GW
+set / interface irb0 subinterface 10 ipv4 admin-state enable address 192.168.10.254/24 anycast-gw true
+set / interface irb0 subinterface 10 ipv4 arp learn-unsolicited true
+set / interface irb0 subinterface 10 anycast-gw anycast-gw-mac 00:00:5E:00:01:01
+set / network-instance tenant-1 interface irb0.10
+
+# IP-VRF (L3)
+set / network-instance ip-vrf-1 type ip-vrf
+set / network-instance ip-vrf-1 interface irb0.10
+set / network-instance ip-vrf-1 vxlan-interface vxlan0.2
+# EVPN L3
+set / network-instance ip-vrf-1 protocols bgp-evpn bgp-instance 1 admin-state enable
+set / network-instance ip-vrf-1 protocols bgp-evpn bgp-instance 1 encapsulation-type vxlan
+set / network-instance ip-vrf-1 protocols bgp-evpn bgp-instance 1 vxlan-interface vxlan0.2
+set / network-instance ip-vrf-1 protocols bgp-evpn bgp-instance 1 evi 20
+set / network-instance ip-vrf-1 protocols bgp-vpn bgp-instance 1 route-target export-rt target:65000:10
+set / network-instance ip-vrf-1 protocols bgp-vpn bgp-instance 1 route-target import-rt target:65000:10
+commit now

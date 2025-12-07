@@ -1,0 +1,25 @@
+enter candidate
+# Interfaces
+set / interface system0 subinterface 0 ipv4 admin-state enable address 4.4.4.4/32
+set / interface ethernet-1/1 subinterface 0 ipv4 admin-state enable address 10.1.1.5/30
+set / interface ethernet-1/2 subinterface 0 ipv4 admin-state enable address 10.1.2.5/30
+set / network-instance default interface system0.0
+set / network-instance default interface ethernet-1/1.0
+set / network-instance default interface ethernet-1/2.0
+# Underlay
+set / network-instance default protocols isis instance 1 admin-state enable level-capability L2 net [ 49.0001.0000.0000.0004.00 ]
+set / network-instance default protocols isis instance 1 interface ethernet-1/1.0 circuit-type point-to-point
+set / network-instance default protocols isis instance 1 interface ethernet-1/2.0 circuit-type point-to-point
+set / network-instance default protocols isis instance 1 interface system0.0 passive true
+# Overlay BGP
+set / network-instance default protocols bgp autonomous-system 65000 router-id 4.4.4.4
+set / network-instance default protocols bgp afi-safi evpn admin-state enable
+set / network-instance default protocols bgp afi-safi ipv4-unicast admin-state enable
+set / network-instance default protocols bgp group overlay-rr peer-as 65000 transport local-address 4.4.4.4
+set / network-instance default protocols bgp group overlay-rr afi-safi evpn admin-state enable
+set / network-instance default protocols bgp group overlay-rr route-reflector client true
+set / network-instance default protocols bgp group overlay-rr route-reflector cluster-id 4.4.4.4
+set / network-instance default protocols bgp neighbor 1.1.1.1 peer-group overlay-rr
+set / network-instance default protocols bgp neighbor 2.2.2.2 peer-group overlay-rr
+set / network-instance default protocols bgp admin-state enable
+commit now
