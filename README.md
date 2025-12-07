@@ -101,9 +101,11 @@ This command will pull the Docker images and pushes the **Zero Touch Provisionin
 sudo containerlab deploy -t clab-topology/fabric.clab.yml --reconfigure
 ```
 ### 3. Visualize
-Access the **Containerlab Graph GUI** to view the real-time  network topology in your browser.
-**Start Graph:** ```bash
+Access the **Containerlab Graph GUI** to view the real-time  network topology **in your browser.**
+**Run the GUI server:** 
+```bash
 sudo containerlab graph -t clab-topology/fabric.clab.yml
+```
 **Open**: http://localhost:50080
 
 ### 4. Validation test
