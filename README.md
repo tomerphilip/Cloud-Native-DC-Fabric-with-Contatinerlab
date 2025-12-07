@@ -7,7 +7,7 @@
 
 > A containerized Cloud-Native DC Fabric built with Nokia SR Linux (CNFs Routers). Implements a resilient Clos (Leaf-Spine) topology using BGP-EVPN/VXLAN. Fully automated via Containerlab to simulate hyperscale infrastructure suitable for Cloud and HPC workloads.
 > 
-> **Strategic Goals:**
+> ### 🎯 Design Principles
 * **🛡️ Resiliency:** Elimination of Single Points of Failure (SPOF) via Clos topology and  ECMP.
 * **🚀 Performance:** Non-blocking East-West traffic optimization using VXLAN overlays.
 * **🤸 Agility:** Seamless VM/Container *mobility* with Distributed Anycast Gateways.
