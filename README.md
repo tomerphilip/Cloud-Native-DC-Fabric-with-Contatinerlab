@@ -13,7 +13,7 @@
 * **🤸 Agility:** Seamless VM/Container *mobility* with Distributed Anycast Gateways.
 * **🔐 Multi-Tenancy:** Hard isolation between tenants using VRFs and BGP-EVPN signaling.
 
-**⚡ Simplicity: Spin up the entire Digital Twin with just one line of code.**
+**⚡ Simplicity: Spin up the entire Digital Twin lab with just one line of code!**
 
 ---
 
@@ -95,20 +95,33 @@ cd Cloud-Native-DC-Fabric-with-Contatinerlab
 ```
 ### 2. Deploy the Fabric
 Spin up the topology. 
-This command will pull the Docker images, launch the network nodes, and inject the configurations.
+This command will pull the Docker images and pushes the **Zero Touch Provisioning (ZTP)** configs.
 
 ```bash
 sudo containerlab deploy -t clab-topology/fabric.clab.yml --reconfigure
 ```
-### 3. Visualize the Topology
-Access the **Containerlab Graph console** to view the real-time interactive network topology directly in your browser.
-**URL**: http://localhost:50080
+### 3. Visualize
+Access the **Containerlab Graph GUI** to view the real-time  network topology in your browser.
+**Start Graph:** ```bash
+sudo containerlab graph -t clab-topology/fabric.clab.yml
+**Open**: http://localhost:50080
 
 ### 4. Validation test
-Verify the overlay data plane by pinging between the two isolated AI Servers over the VXLAN fabric.
+Verify the overlay data plane by pinging between the two isolated Servers over the VXLAN fabric.
 ```bash
 docker exec -it clab-evpn01-srv1 ping 192.168.10.2
 ```
+### 5. Destroy the lab! 🧹
+Finished exploring? Gracefully stop and free up system.
+```bash
+sudo containerlab destroy -t clab-topology/fabric.clab.yml --cleanup
+```
+
+**🙌 Thank You!**
+
+Thanks for deploying the Cloud-Native DC Fabric. I hope this provided valuable insights into modern, automated Data Center architectures.
+
+**Feel free to ⭐ the repository if you found this engineering useful!**
 
 ### 🔮 Roadmap & Future Evolution
 This project is designed to evolve from a static fabric to a fully observable, self-driving network.
