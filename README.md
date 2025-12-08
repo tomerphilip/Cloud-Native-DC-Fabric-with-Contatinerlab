@@ -85,6 +85,7 @@ graph TD
 Get the Digital Twin running on your laptop in **4 simple steps.**
 
 > **Prerequisites:** `Docker`, `Containerlab`, `Linux VM /WSL2`.
+> Don't have Containerlab? Install it: ```bash -c "$(curl -sL https://get.containerlab.dev)"```
 
 ### 1. Clone the Repository
 Pull the infrastructure code and navigate to the project directory.
@@ -101,7 +102,8 @@ This command will pull the Docker images and pushes the **Zero Touch Provisionin
 sudo containerlab deploy -t clab-topology/fabric.clab.yml --reconfigure
 ```
 ### 3. Visualize
-Access the **Containerlab Graph GUI** to view the real-time  network topology **in your browser.**
+Access the **Containerlab Graph GUI** to view the real-time network topology **in your browser.**
+
 **Run the GUI server:** 
 ```bash
 sudo containerlab graph -t clab-topology/fabric.clab.yml
