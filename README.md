@@ -85,6 +85,7 @@ graph TD
 Get the Digital Twin running on your laptop in **4 simple steps.**
 
 > **Prerequisites:** `Docker`, `Containerlab`, `Linux VM /WSL2`.
+>
 > Don't have Containerlab? Install it: ```bash -c "$(curl -sL https://get.containerlab.dev)"```
 
 ### 1. Clone the Repository
